@@ -13,7 +13,6 @@ summarizeForm.addEventListener('submit', async (event) => {
         .replace(/\s+/g, '%20') // replace spaces with %20
         .trim(); // remove leading/trailing spaces
 
-
     // Send a request to the server to summarize the text
     console.log('Sending request to /summarize');
     const response = await fetch('/summarize', {
