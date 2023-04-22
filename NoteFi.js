@@ -35,13 +35,13 @@ app.get("/", function (req, res) {
 // Define summary endpoint
 app.post('/summarize', async (req, res) => {
   const text = req.body.text;
-  const prompt = `Please summarize the following text into a list of detailed, concise key takeaways. Each takeaway must be in 50 words or less. Prompt is as follows:\n\n${text}\n\t`;
+  const prompt = `Please summarize the following text into a complete list of up to 7 detailed, concise key takeaways each less than 50 words:\n\n${text}\n\t`;
 
   try {
     const response = await openai.complete({
       engine: 'text-davinci-002',
       prompt: prompt,
-      maxTokens: 500,
+      maxTokens: 400,
       temperature: 0.5,
       n: 1,
       stop: '\n ',
@@ -55,14 +55,19 @@ app.post('/summarize', async (req, res) => {
     
     // remove the first character of each string that starts with a `-`
     statements = statements.map(statement => {
-      if (statement.startsWith('-')) {
-        return statement.substring(1).trim();
+      const regex = /^-|^(\d+)\.\s/g; // matches "-" or any number followed by a dot and space, e.g., "1. "
+      if (regex.test(statement)) {
+        return statement.replace(regex, '').trim();
       } else {
         return statement.trim();
       }
     });
-    
-    // create the list
+
+    // create the list and if more than 7 items, disregard the last item.
+    if (statements.length > 7) {
+      statements = statements.slice(0, -1);
+    }
+
     const listItems = statements.map(statement => `<li>${statement}</li>`).join('');
     
     // send the list as the response
@@ -85,28 +90,3 @@ const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
-
-
-
-// // Server processes request and responds to client.
-// app.post('/summarize', async (req, res) => {
-//     const text = req.body.text;
-//     const summarizedText = await summarizeText(text);
-//     res.send(summarizedText);
-// });
-  
-// async function summarizeText(text) {
-//     const response = await openai.api({
-//       engine: 'davinci',
-//       prompt: text,
-//       maxTokens: 60,
-//       n: 1,
-//       temperature: 0.7,
-//     }, { headers: { Authorization: `Bearer ${apiKey}` } });
-//     return response.choices[0].text;
-//   }
-
-// // RUN SERVER
-// app.listen(port, function () {
-//     console.log("Server running on port " + port + "!");
-// });

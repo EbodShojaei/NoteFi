@@ -8,7 +8,11 @@ summarizeForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
     const formData = new FormData(summarizeForm);
-    const text = formData.get('text');
+    const text = formData.get('text')
+        .replace(/[\n\r]+/g, '') // remove line breaks
+        .replace(/\s+/g, '%20') // replace spaces with %20
+        .trim(); // remove leading/trailing spaces
+
 
     // Send a request to the server to summarize the text
     console.log('Sending request to /summarize');
