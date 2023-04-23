@@ -51,7 +51,11 @@ summarizeForm.addEventListener('submit', async (event) => {
 
     if (numWords > 600) {
         toggleLoader(false);
-        summaryDiv.innerHTML = 'Word count exceeds 600. Please summarize a shorter text.';
+        summaryDiv.innerHTML = 'Word count above 600. Please summarize a shorter text.';
+
+    } else if (numWords < 100) {
+        toggleLoader(false);
+        summaryDiv.innerHTML = 'Word count below 100. Please summarize a longer text.';
 
     } else {
         // Send a request to the server to summarize the text

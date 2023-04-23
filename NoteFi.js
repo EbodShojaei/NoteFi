@@ -108,7 +108,7 @@ app.post('/summarize', async (req, res) => {
         var num = 3;
         var minNum = 3;
       }
-      
+
       console.log(`Setting 3 selected: Max ${num} statements`);
       break;
 
