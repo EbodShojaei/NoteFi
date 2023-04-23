@@ -51,41 +51,49 @@ app.post('/summarize', async (req, res) => {
       console.log('Setting 1 selected: Max 3 statements');
 
       if (numWords >= 300) {
-        var maxWords = Math.floor(numWords * 0.25);
+        var maxWords = (Math.floor(numWords * 0.25) + 50);
         var num = 3;
+        var minNum = 3;
       } else {
-        var maxWords = numWords + 50;
+        var maxWords = (numWords + 50);
         var num = 3;
+        var minNum = 3;
       }
 
       break;
     case 2:
-      console.log('Setting 2 selected: Max 6 statements');
+      console.log('Setting 2 selected: Max 7 statements');
 
       if (numWords >= 300) {
-        var maxWords = Math.floor(numWords * 0.50);
-        var num = 6;
+        var maxWords = (Math.floor(numWords * 0.50) + 50);
+        var num = 7;
+        var minNum = 6;
       } else if (numWords >= 150) {
-        var maxWords = numWords;
+        var maxWords = (numWords + 50);
         var num = 5;
+        var minNum = 4;
       } else {
-        var maxWords = numWords + 50;
+        var maxWords = (numWords + 50);
         var num = 3;
+        var minNum = 2;
       }
 
       break;
     case 3:
-      console.log('Setting 3 selected: Max 10 statements');
+      console.log('Setting 3 selected: Max 11 statements');
 
       if (numWords >= 300) {
-        var maxWords = Math.floor(numWords * 0.75);
-        var num = 10;
+        var maxWords = (Math.floor(numWords * 0.75) + 50);
+        var num = 11;
+        var minNum = 10;
       } else if (numWords >= 150) {
-        var maxWords = numWords;
+        var maxWords = (numWords + 50);
         var num = 7;
+        var minNum = 5;
       } else {
-        var maxWords = numWords + 50;
+        var maxWords = (numWords + 50);
         var num = 3;
+        var minNum = 2;
       }
 
       break;
@@ -98,7 +106,7 @@ app.post('/summarize', async (req, res) => {
 
   console.log(maxWords);
 
-  const prompt = `Please summarize the following text into a complete list of up to ${num} detailed, concise key takeaways each complete sentences less than 50 words, with a total word count always less than ${maxWords}:\n\n${text}\n\t`;
+  const prompt = `Please summarize the following text into a complete list of at least ${minNum} and up to ${num} detailed, concise key takeaways that are each complete sentences less than 50 words, with a total word count always less than ${maxWords}:\n\n${text}\n\t`;
 
   try {
     const response = await openai.complete({
