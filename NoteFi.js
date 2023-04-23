@@ -59,7 +59,7 @@ app.post('/summarize', async (req, res) => {
         var maxWords = (numWords + 50);
         var minWords = numWords;
         var num = 3;
-        var minNum = 3;
+        var minNum = 2;
       }
       break;
 
@@ -85,13 +85,18 @@ app.post('/summarize', async (req, res) => {
       break;
 
     case 3:
-      console.log('Setting 3 selected: Max 11 statements');
-
       if (numWords >= 300) {
         var maxWords = (Math.floor(numWords * 0.75) + 50);
         var minWords = (Math.floor(numWords * 0.75) - 100);
-        var num = 11;
         var minNum = 10;
+
+        // Conditional ensures max list items greater than min.
+        if (Math.floor(maxWords / 50) <= minNum) {
+          var num = 11;
+        } else {
+          var num = Math.floor(maxWords / 50);
+        }
+
       } else if (numWords >= 150) {
         var maxWords = (numWords + 50);
         var minWords = numWords;
@@ -101,8 +106,10 @@ app.post('/summarize', async (req, res) => {
         var maxWords = (numWords + 50);
         var minWords = numWords;
         var num = 3;
-        var minNum = 2;
+        var minNum = 3;
       }
+      
+      console.log(`Setting 3 selected: Max ${num} statements`);
       break;
 
     default:
@@ -114,7 +121,7 @@ app.post('/summarize', async (req, res) => {
 
   console.log(maxWords);
 
-  const prompt = `In this new request, summarize the following text into a new complete list that must always have between ${minNum} to ${num} detailed, concise key takeaways that are each complete sentences less than 50 words, where the total word count of the entire list is always between ${minWords} and ${maxWords}; it is crucial that the list always has at least ${minNum} total list items and at most ${num} list items; never include in-text citations. The text is as follows:\n\n${text}\n\t`;
+  const prompt = `In this new request, summarize the following text into a new complete list that must always have between ${minNum} to ${num} detailed, concise key takeaways that are each complete sentences less than 50 words ending with a period, where the total word count of the entire list is always between ${minWords} and ${maxWords}; always exclude portions of text containing any in-text citations and cross-references that may appear in each list item, but do not exclude the list item entirely; it is crucial that the list always has at least ${minNum} total list items and at most ${num} list items. The text is as follows:\n\n${text}\n\t`;
 
   try {
     const response = await openai.complete({
