@@ -52,10 +52,12 @@ app.post('/summarize', async (req, res) => {
 
       if (numWords >= 300) {
         var maxWords = (Math.floor(numWords * 0.25) + 50);
+        var minWords = (Math.floor(numWords * 0.25) - 100);
         var num = 3;
         var minNum = 3;
       } else {
         var maxWords = (numWords + 50);
+        var minWords = numWords;
         var num = 3;
         var minNum = 3;
       }
@@ -66,14 +68,17 @@ app.post('/summarize', async (req, res) => {
 
       if (numWords >= 300) {
         var maxWords = (Math.floor(numWords * 0.50) + 50);
+        var minWords = (Math.floor(numWords * 0.50) - 100);
         var num = 7;
         var minNum = 6;
       } else if (numWords >= 150) {
         var maxWords = (numWords + 50);
+        var minWords = numWords;
         var num = 5;
         var minNum = 4;
       } else {
         var maxWords = (numWords + 50);
+        var minWords = numWords;
         var num = 3;
         var minNum = 2;
       }
@@ -84,14 +89,17 @@ app.post('/summarize', async (req, res) => {
 
       if (numWords >= 300) {
         var maxWords = (Math.floor(numWords * 0.75) + 50);
+        var minWords = (Math.floor(numWords * 0.75) - 100);
         var num = 11;
         var minNum = 10;
       } else if (numWords >= 150) {
         var maxWords = (numWords + 50);
+        var minWords = numWords;
         var num = 7;
         var minNum = 5;
       } else {
         var maxWords = (numWords + 50);
+        var minWords = numWords;
         var num = 3;
         var minNum = 2;
       }
@@ -106,7 +114,7 @@ app.post('/summarize', async (req, res) => {
 
   console.log(maxWords);
 
-  const prompt = `Please summarize the following text into a complete list of at least ${minNum} and up to ${num} detailed, concise key takeaways that are each complete sentences less than 50 words, with a total word count always less than ${maxWords}:\n\n${text}\n\t`;
+  const prompt = `In this new request, summarize the following text into a new complete list that must always have between ${minNum} to ${num} detailed, concise key takeaways that are each complete sentences less than 50 words, where the total word count of the entire list is always between ${minWords} and ${maxWords}; it is crucial that the list always has at least ${minNum} total list items and at most ${num} list items. The text is as follows:\n\n${text}\n\t`;
 
   try {
     const response = await openai.complete({
@@ -114,7 +122,7 @@ app.post('/summarize', async (req, res) => {
       prompt: prompt,
       maxTokens: maxWords,
       temperature: 0.5,
-      n: 1,
+      n: 3,
       stop: '\n ',
     });
 
@@ -138,7 +146,7 @@ app.post('/summarize', async (req, res) => {
     const listItems = statements.map(statement => `<li>${statement}</li>`).join('');
 
     // send the list as the response
-    const responseHtml = `<ul>${listItems}</ul>`;
+    const responseHtml = `<ul id="output">${listItems}</ul>`;
     res.send(responseHtml);
 
   } catch (error) {

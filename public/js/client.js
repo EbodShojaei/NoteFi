@@ -1,27 +1,52 @@
 console.log("client.js loaded.");
 
-let sliderValue = 1; 
+let sliderValue = 1;
 
 // Client listens for submission of text and slider value to send request to server.
 const summarizeForm = document.getElementById('summarize-form');
 const summaryDiv = document.getElementById('summary');
 const sliderDiv = document.getElementById('slider');
+const loader = document.getElementById('loader');
 
 sliderDiv.addEventListener('input', (event) => {
     console.log('Slider value:', event.target.value);
-    // do something with the slider value
+
+    // update the slider value
     sliderValue = event.target.value;
-  });
+});
+
+// Function to hide the loader element
+show = false;
+
+function toggleLoader(show) {
+    if (show === true) {
+        loader.style.display = 'block';
+        summaryDiv.style.display = 'none'
+    } else {
+        loader.style.display = 'none';
+        summaryDiv.style.display = 'block';
+    }
+}
+
+// Function to remove the generated list when user resubmits request
+function removeGeneratedList() {
+    const generatedList = document.getElementById('output');
+    if (generatedList) {
+        generatedList.remove();
+    }
+}
 
 summarizeForm.addEventListener('submit', async (event) => {
     event.preventDefault();
+    toggleLoader(true);
+    removeGeneratedList();
 
     const formData = new FormData(summarizeForm);
     const text = formData.get('text')
         .replace(/[\n\r]+/g, '') // remove line breaks
         .replace(/\s+/g, '%20') // replace spaces with %20
         .trim(); // remove leading/trailing spaces
-      
+
     const numWords = getWordCount();
 
     // Send a request to the server to summarize the text
@@ -39,8 +64,10 @@ summarizeForm.addEventListener('submit', async (event) => {
     if (response.ok) {
         // Display the summarized text on the page
         const summary = await response.text();
+        toggleLoader(false);
         summaryDiv.innerHTML = summary;
     } else {
+        toggleLoader(false);
         summaryDiv.innerHTML = 'An error occurred while summarizing the text.';
     }
 });
