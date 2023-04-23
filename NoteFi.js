@@ -61,8 +61,8 @@ app.post('/summarize', async (req, res) => {
         var num = 3;
         var minNum = 3;
       }
-
       break;
+
     case 2:
       console.log('Setting 2 selected: Max 7 statements');
 
@@ -82,8 +82,8 @@ app.post('/summarize', async (req, res) => {
         var num = 3;
         var minNum = 2;
       }
-
       break;
+
     case 3:
       console.log('Setting 3 selected: Max 11 statements');
 
@@ -103,8 +103,8 @@ app.post('/summarize', async (req, res) => {
         var num = 3;
         var minNum = 2;
       }
-
       break;
+
     default:
       console.log('Invalid setting selected');
       var num = 0;
@@ -114,7 +114,7 @@ app.post('/summarize', async (req, res) => {
 
   console.log(maxWords);
 
-  const prompt = `In this new request, summarize the following text into a new complete list that must always have between ${minNum} to ${num} detailed, concise key takeaways that are each complete sentences less than 50 words, where the total word count of the entire list is always between ${minWords} and ${maxWords}; it is crucial that the list always has at least ${minNum} total list items and at most ${num} list items. The text is as follows:\n\n${text}\n\t`;
+  const prompt = `In this new request, summarize the following text into a new complete list that must always have between ${minNum} to ${num} detailed, concise key takeaways that are each complete sentences less than 50 words, where the total word count of the entire list is always between ${minWords} and ${maxWords}; it is crucial that the list always has at least ${minNum} total list items and at most ${num} list items; never include in-text citations. The text is as follows:\n\n${text}\n\t`;
 
   try {
     const response = await openai.complete({
@@ -122,7 +122,7 @@ app.post('/summarize', async (req, res) => {
       prompt: prompt,
       maxTokens: maxWords,
       temperature: 0.5,
-      n: 3,
+      n: 2,
       stop: '\n ',
     });
 

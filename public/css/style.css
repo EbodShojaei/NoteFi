@@ -1,100 +1,106 @@
 body {
-    background-color: #051014;
-    color: white;
-    font-family: Helvetica, Arial, sans-serif;
-    margin: 0;
-  }
-  
-  #container {
-    display: grid;
-    grid-template-columns: 100vw;
-    grid-template-rows: 10vh repeat(auto, 1fr) 10vh;
-    grid-auto-flow: row dense;
-    min-height: 100vh; /* Added this line to set minimum height of container to 100vh */
-  }
-  
-  #container > div {
-    background-color: #1b2021;
-    display: grid;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  #word-count,
-  #slider {
-    justify-self: center;
-  }
-  
-  #header,
-  #footer {
-    background-color: #051014;
-    padding: 5px;
-  }
-  
-  #header {
-    grid-row: 1 / span 1;
-  }
-  
-  #content {
-    grid-column: 1 / -1;
-    grid-row: 2 / auto;
-    grid-gap: 5vw;
-    padding: 9vmax;
+  background-color: #051014;
+  color: white;
+  font-family: Helvetica, Arial, sans-serif;
+  margin: 0 !important;
+}
+
+#container {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 10vh repeat(auto, 1fr) 10vh;
+  grid-auto-flow: row dense;
+  min-height: 100vh;
+  /* Added this line to set minimum height of container to 100vh */
+}
+
+#container>div {
+  background-color: #1b2021;
+  display: grid;
+  align-items: center;
+  justify-content: center;
+}
+
+#word-count,
+#slider {
+  justify-self: center;
+}
+
+#header,
+#footer {
+  background-color: #051014;
+  padding: 5px;
+}
+
+#header {
+  grid-row: 1 / span 1;
+}
+
+#content {
+  grid-column: 1 / -1;
+  grid-row: 2 / auto;
+  grid-gap: 5vw;
+  padding: 9vmax;
+}
+
+#loader {
+  border: 16px solid #f3f3f3;
+  border-top: 16px solid #3498db;
+  border-radius: 50%;
+  display: none;
+  width: 80px;
+  height: 80px;
+  animation: spin 2s linear infinite;
+  margin: 20px auto;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
   }
 
-  #loader {
-    border: 16px solid #f3f3f3;
-    border-top: 16px solid #3498db;
-    border-radius: 50%;
-    display: none;
-    width: 80px;
-    height: 80px;
-    animation: spin 2s linear infinite;
-    margin: 20px auto;
+  100% {
+    transform: rotate(360deg);
   }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
+}
 
-  #summary {
-    display: none;
-  }
+#summary {
+  display: none;
+}
 
-  #footer {
-    grid-column: 1 / -1;
-    grid-row: auto / span 1; /* Modified this line to set footer to the last row */
-    display: grid;
-    padding: 2%;
-  }
-  
-  /* Optional styles for the form elements */
-  
-  form {
-    display: grid;
-    grid-gap: 10px;
-  }
-  
-  label {
-    font-weight: bold;
-  }
-  
-  textarea {
-    width: 100%;
-    height: 100px;
-    resize: vertical;
-  }
-  
-  button {
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #3e8e41;
-  }
-  
+#footer {
+  grid-column: 1 / -1;
+  grid-row: auto / span 1;
+  /* Modified this line to set footer to the last row */
+  display: grid;
+  padding: 2%;
+}
+
+/* Optional styles for the form elements */
+
+form {
+  display: grid;
+  grid-gap: 10px;
+}
+
+label {
+  font-weight: bold;
+}
+
+textarea {
+  width: 90vw;
+  height: 40vh;
+  resize: vertical;
+}
+
+button {
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #3e8e41;
+}
