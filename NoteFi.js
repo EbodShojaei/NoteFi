@@ -55,9 +55,9 @@ app.post('/summarize', async (req, res) => {
     
     // remove the first character of each string that starts with a `-`
     statements = statements.map(statement => {
-      const regex = /^-|^(\d+)\.\s/g; // matches "-" or any number followed by a dot and space, e.g., "1. "
+      const regex = /^\s*(-|^\d+\.)\s*/g; // matches "-" or any number followed by a dot and space, e.g., "1. "
       if (regex.test(statement)) {
-        return statement.replace(regex, '').trim();
+        return statement.trim().replace(regex, '').trim();
       } else {
         return statement.trim();
       }
