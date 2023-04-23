@@ -26,10 +26,10 @@ app.use(express.json());
 
 // Responds with index.html
 app.get("/", function (req, res) {
-    let doc = fs.readFileSync("./app/html/index.html", "utf8");
+  let doc = fs.readFileSync("./app/html/index.html", "utf8");
 
-    // Send the HTTP response
-    res.send(doc);
+  // Send the HTTP response
+  res.send(doc);
 });
 
 // Define summary endpoint
@@ -51,16 +51,12 @@ app.post('/summarize', async (req, res) => {
     const summary = response.data.choices[0].text.trim();
 
     // split the summary by newline character
-    let statements = summary.split('\n-');
-    
-    // remove the first character of each string that starts with a `-`
+    let statements = summary.split('\n');
+
+    // remove numbered and hyphen bullet points from start of each statement
     statements = statements.map(statement => {
-      const regex = /^\s*(-|^\d+\.)\s*/g; // matches "-" or any number followed by a dot and space, e.g., "1. "
-      if (regex.test(statement)) {
-        return statement.trim().replace(regex, '').trim();
-      } else {
-        return statement.trim();
-      }
+      const regex = /^\s*(?:\d+\.|-)\s*/g; // matches numbered bullet points and hyphen bullet points at the start of each line
+      return statement.trim().replace(regex, '').trim();
     });
 
     // create the list and if more than 7 items, disregard the last item.
@@ -69,10 +65,10 @@ app.post('/summarize', async (req, res) => {
     }
 
     const listItems = statements.map(statement => `<li>${statement}</li>`).join('');
-    
+
     // send the list as the response
     const responseHtml = `<ul>${listItems}</ul>`;
-    res.send(responseHtml);    
+    res.send(responseHtml);
 
   } catch (error) {
     console.log(error);
@@ -82,7 +78,7 @@ app.post('/summarize', async (req, res) => {
 
 // For page not found (i.e., 404)
 app.use(function (req, res, next) {
-    res.status(404).send("<html><head><title>Page not found!</title></head><body><p>Nothing here.</p></body></html>");
+  res.status(404).send("<html><head><title>Page not found!</title></head><body><p>Nothing here.</p></body></html>");
 });
 
 // Start server
