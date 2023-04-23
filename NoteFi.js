@@ -49,18 +49,45 @@ app.post('/summarize', async (req, res) => {
   switch (sliderValue) {
     case 1:
       console.log('Setting 1 selected: Max 3 statements');
-      var num = 3;
-      var maxWords = Math.floor(numWords * 0.25);
+
+      if (numWords >= 300) {
+        var maxWords = Math.floor(numWords * 0.25);
+        var num = 3;
+      } else {
+        var maxWords = numWords + 50;
+        var num = 3;
+      }
+
       break;
     case 2:
-      console.log('Setting 2 selected: Max 7 statements');
-      var num = 7;
-      var maxWords = Math.floor(numWords * 0.50);
+      console.log('Setting 2 selected: Max 6 statements');
+
+      if (numWords >= 300) {
+        var maxWords = Math.floor(numWords * 0.50);
+        var num = 6;
+      } else if (numWords >= 150) {
+        var maxWords = numWords;
+        var num = 5;
+      } else {
+        var maxWords = numWords + 50;
+        var num = 3;
+      }
+
       break;
     case 3:
       console.log('Setting 3 selected: Max 10 statements');
-      var num = 10;
-      var maxWords = Math.floor(numWords * 0.75);
+
+      if (numWords >= 300) {
+        var maxWords = Math.floor(numWords * 0.75);
+        var num = 10;
+      } else if (numWords >= 150) {
+        var maxWords = numWords;
+        var num = 7;
+      } else {
+        var maxWords = numWords + 50;
+        var num = 3;
+      }
+
       break;
     default:
       console.log('Invalid setting selected');
@@ -71,7 +98,7 @@ app.post('/summarize', async (req, res) => {
 
   console.log(maxWords);
 
-  const prompt = `Please summarize the following text into a complete list of up to ${num} detailed, concise key takeaways each less than 50 words, with a total word count always less than ${maxWords}:\n\n${text}\n\t`;
+  const prompt = `Please summarize the following text into a complete list of up to ${num} detailed, concise key takeaways each complete sentences less than 50 words, with a total word count always less than ${maxWords}:\n\n${text}\n\t`;
 
   try {
     const response = await openai.complete({
