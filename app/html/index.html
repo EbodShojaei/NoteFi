@@ -1,23 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Summarizer</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
+  <title>Summarizer</title>
+  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
 </head>
+
 <body>
-    <h1>Summarizer</h1>
-    <form id="summarize-form">
-      <label for="text-input">Enter text to summarize:</label>
-      <textarea id="text-input" name="text"></textarea>
-      <div id="word-count"></div>
-      <div id="slider"></div>
-      <button type="submit">Summarize</button>
-    </form>
-    <div id="summary"></div>
-    <script src="js/client.js"></script>
-    <script src="js/wordCount.js"></script>
-    <script src="js/slider.js"></script>
+  <div id="container">
+    <div id="header">
+      <h1>Summarizer</h1>
+    </div>
+    <div id="content">
+      <form id="summarize-form">
+        <label for="text-input">Enter text to summarize:</label>
+        <textarea id="text-input" name="text"></textarea>
+        <div id="word-count"></div>
+        <div id="slider"></div>
+        <button type="submit">Summarize</button>
+      </form>
+      <div id="summary"></div>
+    </div>
+    <div id="footer">Footer</div>
+  </div>
+
+  <!-- Scripts go here -->
+  <script src="js/client.js"></script>
+  <script src="js/wordCount.js"></script>
+  <script src="js/slider.js"></script>
 </body>
+
 </html>
