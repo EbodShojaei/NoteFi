@@ -49,25 +49,31 @@ summarizeForm.addEventListener('submit', async (event) => {
 
     const numWords = getWordCount();
 
-    // Send a request to the server to summarize the text
-    console.log('Sending request to /summarize');
-    const response = await fetch('/summarize', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ text: text, sliderValue: sliderValue, numWords: numWords })
-    }).catch(err => {
-        console.error('Error fetching /summarize:', err);
-    });
+    if (numWords > 600) {
+        toggleLoader(false);
+        summaryDiv.innerHTML = 'Word count exceeds 600. Please summarize a shorter text.';
 
-    if (response.ok) {
-        // Display the summarized text on the page
-        const summary = await response.text();
-        toggleLoader(false);
-        summaryDiv.innerHTML = summary;
     } else {
-        toggleLoader(false);
-        summaryDiv.innerHTML = 'An error occurred while summarizing the text.';
+        // Send a request to the server to summarize the text
+        console.log('Sending request to /summarize');
+        const response = await fetch('/summarize', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ text: text, sliderValue: sliderValue, numWords: numWords })
+        }).catch(err => {
+            console.error('Error fetching /summarize:', err);
+        });
+
+        if (response.ok) {
+            // Display the summarized text on the page
+            const summary = await response.text();
+            toggleLoader(false);
+            summaryDiv.innerHTML = summary;
+        } else {
+            toggleLoader(false);
+            summaryDiv.innerHTML = 'An error occurred while summarizing the text.';
+        }
     }
 });
