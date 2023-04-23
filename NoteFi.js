@@ -35,13 +35,49 @@ app.get("/", function (req, res) {
 // Define summary endpoint
 app.post('/summarize', async (req, res) => {
   const text = req.body.text;
-  const prompt = `Please summarize the following text into a complete list of up to 7 detailed, concise key takeaways each less than 50 words:\n\n${text}\n\t`;
+
+  // Slider value dictates length of notes
+  const sliderValue = parseInt(req.body.sliderValue);
+  console.log(sliderValue);
+
+  const numWords = parseInt(req.body.numWords);
+
+  console.log(typeof numWords);
+  console.log(numWords);
+  console.log(sliderValue);
+
+  switch (sliderValue) {
+    case 1:
+      console.log('Setting 1 selected: Max 3 statements');
+      var num = 3;
+      var maxWords = Math.floor(numWords * 0.25);
+      break;
+    case 2:
+      console.log('Setting 2 selected: Max 7 statements');
+      var num = 7;
+      var maxWords = Math.floor(numWords * 0.50);
+      break;
+    case 3:
+      console.log('Setting 3 selected: Max 10 statements');
+      var num = 10;
+      var maxWords = Math.floor(numWords * 0.75);
+      break;
+    default:
+      console.log('Invalid setting selected');
+      var num = 0;
+      var maxWords = 0;
+      break;
+  }
+
+  console.log(maxWords);
+
+  const prompt = `Please summarize the following text into a complete list of up to ${num} detailed, concise key takeaways each less than 50 words, with a total word count always less than ${maxWords}:\n\n${text}\n\t`;
 
   try {
     const response = await openai.complete({
       engine: 'text-davinci-002',
       prompt: prompt,
-      maxTokens: 400,
+      maxTokens: maxWords,
       temperature: 0.5,
       n: 1,
       stop: '\n ',
